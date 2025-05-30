@@ -3,7 +3,7 @@ import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-gray-200 py-8 ">
+    <footer className="bg-gray-900 text-gray-200 py-8 mt-10">
       <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-3 gap-8">
         {/* Logo & About */}
         <div>
