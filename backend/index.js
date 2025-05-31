@@ -14,12 +14,13 @@ dotenv.config();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 const corsOptions = {
-  oriigin: "http://localhost:5173/",
-  methods: "GET,POST,CREATE,UPDATE,DELETE,READ",
-  credential: true,
+  origin: "http://localhost:5173",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true,
 };
-app.use(cookieParser());
+
 app.use(cors(corsOptions));
+app.use(cookieParser());
 
 // api
 app.use("/api/user", userRouter);
