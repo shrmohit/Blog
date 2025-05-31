@@ -6,6 +6,11 @@ import userRouter from "./routes/user.route.js";
 import loginRouter from "./routes/user.route.js";
 import cookieParser from "cookie-parser";
 import logoutRouter from "./routes/user.route.js";
+import blogRouter from "./routes/blog.route.js";
+import blogAllPostRouter from "./routes/blog.route.js";
+import blogByPostRouter from "./routes/blog.route.js";
+import deleteblogRouter from "./routes/blog.route.js";
+import updateblogRouter from "./routes/blog.route.js";
 
 const app = express();
 dotenv.config();
@@ -22,10 +27,17 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(cookieParser());
 
-// api
+// api for authentication
 app.use("/api/user", userRouter);
 app.use("/api/user", loginRouter);
 app.use("/api/user", logoutRouter);
+
+// api for blog
+app.use("/api/blog", blogRouter);
+app.use("/api/blog", blogAllPostRouter); // get all blogs
+app.use("/api/blog", blogByPostRouter); // get blog by id
+app.use("/api/blog", deleteblogRouter);
+app.use("/api/blog", updateblogRouter); // update blog by id
 
 // test route
 app.get("/", (req, res) => {
