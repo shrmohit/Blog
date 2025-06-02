@@ -1,9 +1,10 @@
 import { blogModel } from "../models/blog.model.js";
 
+// create blog
 export const createBlog = async (req, res) => {
   try {
-    const { title, description, image } = req.body;
-    if (!title || !description || !image) {
+    const { title, description, image, user } = req.body;
+    if (!title || !description || !image || !user) {
       return res.status(400).json({
         message: "All fields are required",
         success: false,
@@ -40,7 +41,8 @@ export const getAllBlogs = async (req, res) => {
     }
 
     return res.status(200).json({
-      message: "blogs found",
+      message: "found all blogs",
+      blogCount: blogs.length,
       success: true,
       blogs,
     });

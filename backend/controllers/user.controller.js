@@ -1,4 +1,4 @@
-import { User } from "../models/users.model.js";
+import { userModel } from "../models/users.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -13,7 +13,7 @@ export const registerUser = async (req, res) => {
       });
     }
     // check user email for logging with same email
-    const user = await User.findOne({ email });
+    const user = await userModel.findOne({ email });
     if (user) {
       return res.status(400).json({
         message: "User aleady exists with this email",
@@ -22,7 +22,7 @@ export const registerUser = async (req, res) => {
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
-    await User.create({ name, email, password: passwordHash });
+    await userModel.create({ name, email, password: passwordHash });
 
     return res.status(201).json({
       message: "User Register Successfully",
@@ -44,7 +44,7 @@ export const loginUser = async (req, res) => {
       });
     }
     // note change and update note delcare with const
-    let user = await User.findOne({ email });
+    let user = await userModel.findOne({ email });
     if (!user) {
       return res.status(400).json({
         message: "Incorrect email or password",
@@ -62,13 +62,15 @@ export const loginUser = async (req, res) => {
 
     // create token
     const tokenData = {
-      userId: user._id,
+      name: user.name,
+      email: user.email,
     };
 
     // sign token
     const token = jwt.sign(tokenData, process.env.SECRET_KEY, {
       expiresIn: "1d",
     });
+    console.log("tokenData", token);
 
     // ye step q kara
     user = {

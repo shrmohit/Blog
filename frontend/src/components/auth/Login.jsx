@@ -5,9 +5,12 @@ import { Label } from "../../components/ui/label";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { login } from "../../feature/user/userSlice";
 
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [input, setInput] = useState({
     email: "",
     password: "",
@@ -27,6 +30,7 @@ const Login = () => {
       if (res.data.success) {
         toast.success(res.data.message);
         navigate("/");
+        dispatch(login());
       }
     } catch (error) {
       console.error(error);
