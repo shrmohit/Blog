@@ -31,8 +31,13 @@ const Navbar = () => {
           <h1 className="font-bold text-2xl text-white">Blogly</h1>
         </div>
         <div>
-          <Link>
-            <Button>Create Blog</Button>
+          <Link to="/create-blog">
+            <Button
+              className=" text-white"
+              variant="link"
+            >
+              Create Blog
+            </Button>
           </Link>
         </div>
 
