@@ -3,15 +3,19 @@ import { blogModel } from "../models/blog.model.js";
 // create blog
 export const createBlog = async (req, res) => {
   try {
-    const { title, description, image, user } = req.body;
-    if (!title || !description || !image || !user) {
+    const { title, description } = req.body;
+    const imageFile = req.file ? req.file.path : null;
+    if (!title || !description || !imageFile) {
       return res.status(400).json({
         message: "All fields are required",
         success: false,
       });
     }
 
-    const blog = await blogModel.create({ title, description, image });
+    console.log("Image file path", imageFile);
+
+    const blog = new blogModel({ title, description, image: imageFile });
+    await blog.save();
     if (!blog) {
       return res.status(500).json({
         message: "failed to create blog",
