@@ -27,6 +27,10 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(cookieParser());
 
+// file upload middleware
+import fileUpload from "express-fileupload";
+app.use(fileUpload());
+
 // api for authentication
 app.use("/api/user", userRouter);
 app.use("/api/user", loginRouter);

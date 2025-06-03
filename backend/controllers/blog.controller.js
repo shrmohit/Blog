@@ -1,27 +1,46 @@
 import { blogModel } from "../models/blog.model.js";
+import { fileURLToPath } from "url";
+import path from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // create blog
 export const createBlog = async (req, res) => {
   try {
     const { title, description } = req.body;
-    const imageFile = req.file ? req.file.path : null;
-    if (!title || !description || !imageFile) {
+    const file = req.files?.file; // Optional chaining to avoid crash if files is undefined
+
+    // ✅ Validation
+    if (!title || !description || !file) {
       return res.status(400).json({
         message: "All fields are required",
         success: false,
       });
     }
 
-    console.log("Image file path", imageFile);
+    // ✅ Define upload path (ensure the 'uploads' folder exists)
+    const uploadDir = path.join(__dirname, "../uploads/");
+    const uploadPath = path.join(uploadDir, file.name);
 
-    const blog = new blogModel({ title, description, image: imageFile });
+    // ✅ Save the file to the server
+    file.mv(uploadPath, (err) => {
+      if (err) {
+        console.error("File upload error:", err);
+        return res
+          .status(500)
+          .json({ message: "File upload failed", success: false });
+      }
+    });
+
+    // ✅ Create and save blog post (store only file name or path)
+    const blog = new blogModel({
+      title,
+      description,
+      image: file.name, // or use `uploadPath` if you want full path
+    });
+
     await blog.save();
-    if (!blog) {
-      return res.status(500).json({
-        message: "failed to create blog",
-        success: false,
-      });
-    }
 
     return res.status(201).json({
       message: "Blog created successfully",
@@ -29,7 +48,11 @@ export const createBlog = async (req, res) => {
       blog,
     });
   } catch (error) {
-    console.log(error);
+    console.error("Blog creation error:", error);
+    return res.status(500).json({
+      message: "Server error",
+      success: false,
+    });
   }
 };
 
